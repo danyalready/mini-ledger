@@ -13,10 +13,11 @@ export default class Transaction implements TransactionData {
     amount: number;
     signature?: string;
 
-    constructor(fromAddress: string | null, toAddress: string, amount: number) {
+    constructor(fromAddress: string | null, toAddress: string, amount: number, signature?: string) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
+        this.signature = signature;
     }
 
     calculateHash(): string {
@@ -38,7 +39,7 @@ export default class Transaction implements TransactionData {
     }
 
     isValid(): boolean {
-        if (this.fromAddress === null) return true; // это награда майнеру
+        if (this.fromAddress === null) return true; // miners reward
 
         if (!this.signature) throw new Error('No signature in this transaction');
 

@@ -1,12 +1,21 @@
 import Block from './blockchain/Block';
 import Blockchain from './blockchain/Blockchain';
+import Transaction from './blockchain/Transaction';
+import Wallet from './blockchain/Wallet';
 
-const demoChain = new Blockchain();
+const blockchain = new Blockchain();
+const myWallet = new Wallet();
+const recipientWallet = new Wallet();
 
-console.log('🔨 Mining block 1...');
-demoChain.addBlock(new Block(1, Date.now(), [{ from: 'Alice', to: 'Bob', amount: 10 }]));
+const tx1 = new Transaction(myWallet.getAddress(), recipientWallet.getAddress(), 100);
+tx1.signTransaction(myWallet.getPrivateKey(), myWallet.getAddress());
+const tx2 = new Transaction(myWallet.getAddress(), recipientWallet.getAddress(), 200);
+tx2.signTransaction(myWallet.getPrivateKey(), myWallet.getAddress());
+const tx3 = new Transaction(myWallet.getAddress(), recipientWallet.getAddress(), 500);
+tx3.signTransaction(myWallet.getPrivateKey(), myWallet.getAddress());
 
-console.log('🔨 Mining block 2...');
-demoChain.addBlock(new Block(2, Date.now(), [{ from: 'Bob', to: 'Charlie', amount: 5 }]));
+blockchain.addBlock(new Block(1, [tx1, tx2, tx3]));
+blockchain.addBlock(new Block(2, [tx1, tx2, tx3]));
+blockchain.addBlock(new Block(3, [tx1, tx2, tx3]));
 
-console.log('📦 Blockchain:', JSON.stringify(demoChain, null, 2));
+console.log(JSON.stringify(blockchain, null, 2));

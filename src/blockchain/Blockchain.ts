@@ -6,7 +6,7 @@ export default class Blockchain {
 
     constructor() {
         // Add Genesis Block
-        this.chain = [new Block(0, Date.now(), [])];
+        this.chain = [new Block(0, [])];
     }
 
     getLatestBlock(): Block {
@@ -14,6 +14,8 @@ export default class Blockchain {
     }
 
     addBlock(newBlock: Block) {
+        if (!newBlock.hasValidTransactions()) throw new Error('Block contains invalid transactions!');
+
         newBlock.prevHash = this.getLatestBlock().hash;
         newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);

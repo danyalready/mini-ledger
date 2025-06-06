@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-import { type TransactionData } from './Transaction';
+import Transaction, { type TransactionData } from './Transaction';
 
 interface BlockData {
     index: number;
@@ -13,15 +13,14 @@ interface BlockData {
 
 export default class Block implements BlockData {
     index: number;
-    timestamp: number;
-    transactions: any[];
+    timestamp: number = Date.now();
+    transactions: TransactionData[];
     prevHash: string;
     hash: string;
     nonce: number = 0;
 
-    constructor(index: number, timestamp: number, transactions: any[], prevHash: string = '') {
+    constructor(index: number, transactions: TransactionData[], prevHash: string = '') {
         this.index = index;
-        this.timestamp = timestamp;
         this.transactions = transactions;
         this.prevHash = prevHash;
         this.hash = this.calculateHash();
@@ -40,5 +39,20 @@ export default class Block implements BlockData {
         }
 
         console.log(`✅ Block mined: ${this.hash}`);
+    }
+
+    hasValidTransactions(): boolean {
+        for (const transaction of this.transactions) {
+            const tx = new Transaction(
+                transaction.fromAddress,
+                transaction.toAddress,
+                transaction.amount,
+                transaction.signature
+            );
+
+            if (!tx.isValid()) return false;
+        }
+
+        return true;
     }
 }
