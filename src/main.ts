@@ -1,5 +1,6 @@
+import Blockchain from './classes/blockchain';
 import Block from './classes/block';
 
-const block = new Block(0, new Date().toISOString(), 'Alice -> Bob', '');
+const blockchain = new Blockchain();
 
-console.log(block.hash);
+console.log(blockchain);

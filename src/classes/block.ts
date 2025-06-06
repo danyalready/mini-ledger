@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 export default class Block<T = any> {
     public hash: string;
 
-    constructor(public index: number, public timestamp: string, public data: T, public prevHash: string) {
+    constructor(public index: number, public timestamp: string, public data: T, public prevHash: null | string) {
         this.hash = this.calcHash();
     }
 
