@@ -24,10 +24,10 @@ export default class Block implements BlockData {
         this.timestamp = timestamp;
         this.transactions = transactions;
         this.prevHash = prevHash;
-        this.hash = this.calcHash();
+        this.hash = this.calculateHash();
     }
 
-    calcHash(): string {
+    calculateHash(): string {
         const data = this.index + this.timestamp + JSON.stringify(this.transactions) + this.prevHash + this.nonce;
 
         return crypto.createHash('sha256').update(data).digest('hex');
@@ -36,7 +36,7 @@ export default class Block implements BlockData {
     mineBlock(difficulty: number): void {
         while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
             this.nonce++;
-            this.hash = this.calcHash();
+            this.hash = this.calculateHash();
         }
 
         console.log(`✅ Block mined: ${this.hash}`);

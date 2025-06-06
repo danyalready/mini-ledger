@@ -2,7 +2,7 @@ import Block from './Block';
 
 export default class Blockchain {
     chain: Block[];
-    difficulty: number = 5;
+    difficulty: number = 3;
 
     constructor() {
         // Add Genesis Block
@@ -25,7 +25,7 @@ export default class Blockchain {
             const prevBlock = this.chain[i - 1];
 
             if (
-                currBlock.hash !== currBlock.calcHash() ||
+                currBlock.hash !== currBlock.calculateHash() ||
                 currBlock.prevHash !== prevBlock.hash ||
                 !currBlock.hash.startsWith('0'.repeat(this.difficulty))
             ) {
