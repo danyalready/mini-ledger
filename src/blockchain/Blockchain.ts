@@ -1,11 +1,12 @@
 import Block from './Block';
 
 export default class Blockchain {
-    public chain: Block[];
+    chain: Block[];
+    difficulty: number = 5;
 
     constructor() {
-        // Create Genesis Block
-        this.chain = [new Block(0, new Date().toISOString(), null, null)];
+        // Add Genesis Block
+        this.chain = [new Block(0, Date.now(), [])];
     }
 
     getLatestBlock(): Block {
@@ -14,7 +15,7 @@ export default class Blockchain {
 
     addBlock(newBlock: Block) {
         newBlock.prevHash = this.getLatestBlock().hash;
-        newBlock.hash = newBlock.calcHash();
+        newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);
     }
 
@@ -23,7 +24,11 @@ export default class Blockchain {
             const currBlock = this.chain[i];
             const prevBlock = this.chain[i - 1];
 
-            if (currBlock.hash !== currBlock.calcHash() || currBlock.prevHash !== prevBlock.hash) {
+            if (
+                currBlock.hash !== currBlock.calcHash() ||
+                currBlock.prevHash !== prevBlock.hash ||
+                !currBlock.hash.startsWith('0'.repeat(this.difficulty))
+            ) {
                 return false;
             }
         }

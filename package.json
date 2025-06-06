@@ -1,9 +1,15 @@
 {
-  "name": "blockchain",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^22.15.30"
-  }
+    "name": "blockchain",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "start": "tsc && node dist/main.js",
+        "dev": "ts-node src/main.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.30",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
 }
