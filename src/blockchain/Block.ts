@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import * as crypto from 'crypto';
 
 export default class Block<T = any> {
     public hash: string;
@@ -10,6 +10,6 @@ export default class Block<T = any> {
     calcHash(): string {
         const blockData = this.index + this.timestamp + JSON.stringify(this.data) + this.prevHash;
 
-        return CryptoJS.SHA256(blockData).toString();
+        return crypto.createHash('sha256').update(blockData).digest('hex');
     }
 }

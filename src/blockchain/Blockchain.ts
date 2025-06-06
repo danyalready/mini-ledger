@@ -1,11 +1,11 @@
-import Block from './block';
+import Block from './Block';
 
 export default class Blockchain {
     public chain: Block[];
 
     constructor() {
         // Create Genesis Block
-        this.chain = [new Block(0, new Date().toISOString(), 'Genesis-Block', null)];
+        this.chain = [new Block(0, new Date().toISOString(), null, null)];
     }
 
     getLatestBlock(): Block {
