@@ -1,8 +1,11 @@
 import Block from './Block';
+import Transaction, { TransactionData } from './Transaction';
 
 export default class Blockchain {
     chain: Block[];
-    difficulty: number = 3;
+    pendingTransactions: TransactionData[] = [];
+    difficulty: number = 4;
+    miningReward: number = 100;
 
     constructor() {
         // Add Genesis Block
@@ -13,15 +16,45 @@ export default class Blockchain {
         return this.chain[this.chain.length - 1];
     }
 
-    addBlock(newBlock: Block) {
-        if (!newBlock.hasValidTransactions()) throw new Error('Block contains invalid transactions!');
+    minePendingTransactions(rewardAddress: string) {
+        const rewardTx = new Transaction(null, rewardAddress, this.miningReward);
+        const latestBlock = this.getLatestBlock();
 
-        newBlock.prevHash = this.getLatestBlock().hash;
-        newBlock.mineBlock(this.difficulty);
-        this.chain.push(newBlock);
+        const block = new Block(latestBlock.index + 1, [...this.pendingTransactions, rewardTx], latestBlock.hash);
+
+        if (!block.hasValidTransactions()) throw new Error('Block contains invalid transactions');
+
+        block.mineBlock(this.difficulty);
+
+        this.chain.push(block);
+        this.pendingTransactions = [];
     }
 
-    isChainValid(): boolean {
+    addTransaction(transaction: TransactionData) {
+        if (transaction.amount <= 0) throw new Error('Transaction ammount should be higher than 0');
+
+        this.pendingTransactions.push(transaction);
+    }
+
+    getAddressBalance(address: string): number {
+        let balance = 0;
+
+        for (const block of this.chain) {
+            for (const transaction of block.transactions) {
+                if (transaction.fromAddress === address) {
+                    balance -= transaction.amount;
+                }
+
+                if (transaction.toAddress === address) {
+                    balance += transaction.amount;
+                }
+            }
+        }
+
+        return balance;
+    }
+
+    isValid(): boolean {
         for (let i = 1; i < this.chain.length; i++) {
             const currBlock = this.chain[i];
             const prevBlock = this.chain[i - 1];

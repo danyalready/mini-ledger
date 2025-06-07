@@ -34,6 +34,7 @@ export default class Transaction implements TransactionData {
 
         const hash = this.calculateHash();
         const sign = crypto.createSign('SHA256');
+
         sign.update(hash).end();
         this.signature = sign.sign(privateKey, 'hex');
     }
