@@ -1,7 +1,7 @@
-import Block from './blockchain/Block';
-import Blockchain from './blockchain/Blockchain';
-import Transaction from './blockchain/Transaction';
-import Wallet from './blockchain/Wallet';
+import Block from './core/Block';
+import Blockchain from './core/Blockchain';
+import Transaction from './core/Transaction';
+import Wallet from './core/Wallet';
 
 const blockchain = new Blockchain();
 const myWallet = new Wallet();
@@ -19,3 +19,4 @@ blockchain.addBlock(new Block(2, [tx1, tx2, tx3]));
 blockchain.addBlock(new Block(3, [tx1, tx2, tx3]));
 
 console.log(JSON.stringify(blockchain, null, 2));
+console.log(blockchain.isChainValid());

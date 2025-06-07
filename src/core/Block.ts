@@ -33,7 +33,9 @@ export default class Block implements BlockData {
     }
 
     mineBlock(difficulty: number): void {
-        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
+        const target = Array(difficulty + 1).join('0');
+
+        while (this.hash.substring(0, difficulty) !== target) {
             this.nonce++;
             this.hash = this.calculateHash();
         }
